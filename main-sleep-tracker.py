@@ -1,4 +1,9 @@
 # main.py
+from datetime import datetime, timedelta
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+
 def main():
     #introductory text
     print("Hello Human!")
