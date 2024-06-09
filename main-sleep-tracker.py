@@ -28,10 +28,10 @@ def main():
 
     #calculating total hours of sleep
     sleep_hours = time2 - time1
-    print("The total hours you slept was: " + str(sleep_hours) + "hours")
 
-    hours = sleep_duration.seconds // 3600
-    minutes = (sleep_duration.seconds % 3600) // 60
+    # Extract the hours and minutes from the timedelta object
+    hours = sleep_hours.seconds // 3600
+    minutes = (sleep_hours.seconds % 3600) // 60
 
     print("The total hours you slept was: {} hours and {} minutes".format(hours, minutes))
 
