@@ -26,31 +26,42 @@ def enter_awake_time():
 
 def main():
     #an empty dict
-    #week_info = {}
+    week_info = {
+        "Monday": None,
+        "Tuesday": None,
+        "Wednesday": None,
+        "Thursday": None,
+        "Friday": None,
+        "Saturday": None,
+        "Sunday": None
+    }
     #store sleep data in list/dictionary where each entry -> day of the week
     #dict where keys are dates and the values are the hours of sleep
     #new variable for total accumulated hrs of sleep
     total_sleep_secs = 0
-
+    
     #introductory text
     print("Hello Human!")
     print("Welcome to the Best Sleep Tracker")
     print()
     
+    #list days of week to run through
+    days_of_week = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+
     #need a for loop
-    for sleep_date in range(2): 
+    for day in days_of_week: 
     #ask for user input for sleep date and time, 24hr time to assist with calculations
         print("When did you go to bed? Please enter the date in YYYY-MM-DD e.g. 2024-01-22: ")
         sleep_date = input()
         date = datetime.strptime(sleep_date, "%Y-%m-%d")
         print()
         
-        print("What time did you go to bed? Please enter the time in 24hr format using HH:MM e.g. 22:30 ")
+        print("What time did you go to bed on " + str(day) + "? Please enter the time in 24hr format using HH:MM e.g. 22:30 ")
         sleep_time = input()
         time1 = datetime.strptime(sleep_time, "%H:%M")
         print()
         
-        print("What time did you wake up? Please enter the time in 24hr format using HH:MM e.g. 22:30 ")
+        print("What time did you wake up? Please enter the time in 24hr format using HH:MM e.g. 08:00 ")
         awake_time = input()
         time2 = datetime.strptime(awake_time, "%H:%M")
         print()
@@ -67,15 +78,27 @@ def main():
         minutes = (sleep_duration.seconds % 3600) // 60
         print("The total hours you slept last night: {} hours and {} minutes".format(hours, minutes))
         print()
-        
+    
+    #add to dictionary
+        week_info[day] = (sleep_date, sleep_duration)
+    
+    #update total sleep time
         total_sleep_secs += sleep_duration.total_seconds()
+
     
     total_sleep_hours = total_sleep_secs // 3600
     total_sleep_minutes = (total_sleep_secs % 3600) // 60
     print("The total hours you slept this week: {} hours and {} minutes".format(total_sleep_hours, total_sleep_minutes))
     print()
 
-    
+    for day, info in week_info.items():
+        if info:
+            date, duration = info
+            hours = duration.seconds // 3600
+            minutes = (duration.seconds % 3600) // 60
+            print(f"{day}: Date - {date}, Sleep duration - {hours} hours and {minutes} minutes")
+        else:
+            print(f"{day}: No data")   
 
 if __name__ == "__main__":
     main()
