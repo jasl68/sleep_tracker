@@ -5,27 +5,53 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 #ask for user input for sleep date and time, 24hr time to assist with calculations
-def enter_sleep_date():
-    print("When did you go to bed? Please enter the date in YYYY-MM-DD e.g. 2024-01-22: ")
+def enter_sleep_date(day):
+    print("Let's start with the date for " + str(day) + ". Please enter the date in YYYY-MM-DD e.g. 2024-01-22: ")
     sleep_date = input()
     date = datetime.strptime(sleep_date, "%Y-%m-%d")
     print()
+    return date
 
-def enter_sleep_time():
-    print("What time did you go to bed? Please enter the time in 24hr format using HH:MM e.g. 22:30 ")
+def enter_sleep_time(day):
+    print("What time did you go to bed on " + str(day) + "? Please enter the time in 24hr format using HH:MM e.g. 22:30 ")
     sleep_time = input()
     time1 = datetime.strptime(sleep_time, "%H:%M")
     print()
+    return time1
 
 #ask for user input for awake time
 def enter_awake_time():
-    print("What time did you wake up? Please enter the time in 24hr format using HH:MM e.g. 22:30 ")
+    print("What time did you wake up? Please enter the time in 24hr format using HH:MM e.g. 08:00 ")
     awake_time = input()
     time2 = datetime.strptime(awake_time, "%H:%M")
     print()
+    return time2
+
+def calculate_sleep_duration(time1, time2):
+    if time2 < time1:
+            time2 += timedelta(days=1)
+    #calculating total hours of sleep
+    sleep_duration = time2 - time1
+    return sleep_duration
+
+def sleep_summary(week_info, total_sleep_secs):
+    total_sleep_hours = total_sleep_secs // 3600
+    total_sleep_minutes = (total_sleep_secs % 3600) // 60
+    print("The total hours you slept this week: {} hours and {} minutes".format(total_sleep_hours, total_sleep_minutes))
+    print()
+
+    print("Here is a summary of your sleep for this week: ")
+    for day, info in week_info.items():
+        if info:
+            date, duration = info
+            hours = duration.seconds // 3600
+            minutes = (duration.seconds % 3600) // 60
+            print(f"{day}: Date - {date}, Sleep duration - {hours} hours and {minutes} minutes")
+        else:
+            print(f"{day}: No data") 
 
 def main():
-    #an empty dict
+    #an empty dict with days of week as keys and empty values
     week_info = {
         "Monday": None,
         "Tuesday": None,
@@ -42,7 +68,7 @@ def main():
     
     #introductory text
     print("Hello Human!")
-    print("Welcome to the Best Sleep Tracker")
+    print("Welcome to the Best Sleep Tracker :)")
     print()
     
     #list days of week to run through
@@ -51,27 +77,12 @@ def main():
     #need a for loop
     for day in days_of_week: 
     #ask for user input for sleep date and time, 24hr time to assist with calculations
-        print("When did you go to bed? Please enter the date in YYYY-MM-DD e.g. 2024-01-22: ")
-        sleep_date = input()
-        date = datetime.strptime(sleep_date, "%Y-%m-%d")
-        print()
+        date = enter_sleep_date(day)
         
-        print("What time did you go to bed on " + str(day) + "? Please enter the time in 24hr format using HH:MM e.g. 22:30 ")
-        sleep_time = input()
-        time1 = datetime.strptime(sleep_time, "%H:%M")
-        print()
-        
-        print("What time did you wake up? Please enter the time in 24hr format using HH:MM e.g. 08:00 ")
-        awake_time = input()
-        time2 = datetime.strptime(awake_time, "%H:%M")
-        print()
+        time1 = enter_sleep_time(day)
+        time2 = enter_awake_time()
 
-        if time2 < time1:
-            date += timedelta(days=1)
-            time2 += timedelta(days=1)
-
-    #calculating total hours of sleep
-        sleep_duration = time2 - time1
+        sleep_duration = calculate_sleep_duration(time1, time2)
 
     # Extract the hours and minutes from the timedelta object
         hours = sleep_duration.seconds // 3600
@@ -80,25 +91,15 @@ def main():
         print()
     
     #add to dictionary
-        week_info[day] = (sleep_date, sleep_duration)
+        week_info[day] = (date.strftime("%Y-%m-%d"), sleep_duration)
     
     #update total sleep time
         total_sleep_secs += sleep_duration.total_seconds()
 
-    
-    total_sleep_hours = total_sleep_secs // 3600
-    total_sleep_minutes = (total_sleep_secs % 3600) // 60
-    print("The total hours you slept this week: {} hours and {} minutes".format(total_sleep_hours, total_sleep_minutes))
+    sleep_summary(week_info, total_sleep_secs)
     print()
-
-    for day, info in week_info.items():
-        if info:
-            date, duration = info
-            hours = duration.seconds // 3600
-            minutes = (duration.seconds % 3600) // 60
-            print(f"{day}: Date - {date}, Sleep duration - {hours} hours and {minutes} minutes")
-        else:
-            print(f"{day}: No data")   
+    print("Thank you for trying me out! Feel free to come back again if you want to track a different week of sleep :)")
+    print()  
 
 if __name__ == "__main__":
     main()
