@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 
 #ask for user input for sleep date and time, 24hr time to assist with calculations
 def enter_sleep_date(day):
-    print("Let's start with the date for " + str(day) + ". Please enter the date in YYYY-MM-DD e.g. 2024-01-22: ")
+    print("What was the date on " + str(day) + "? Please enter the date in YYYY-MM-DD e.g. 2024-01-22: ")
     sleep_date = input()
     date = datetime.strptime(sleep_date, "%Y-%m-%d")
     print()
@@ -35,11 +35,6 @@ def calculate_sleep_duration(time1, time2):
     return sleep_duration
 
 def sleep_summary(week_info, total_sleep_secs):
-    total_sleep_hours = total_sleep_secs // 3600
-    total_sleep_minutes = (total_sleep_secs % 3600) // 60
-    print("The total hours you slept this week: {} hours and {} minutes".format(total_sleep_hours, total_sleep_minutes))
-    print()
-
     print("Here is a summary of your sleep for this week: ")
     for day, info in week_info.items():
         if info:
@@ -48,10 +43,25 @@ def sleep_summary(week_info, total_sleep_secs):
             minutes = (duration.seconds % 3600) // 60
             print(f"{day}: Date - {date}, Sleep duration - {hours} hours and {minutes} minutes")
         else:
-            print(f"{day}: No data") 
+            print(f"{day}: No data")
+    
+    total_sleep_hours = total_sleep_secs // 3600
+    total_sleep_minutes = (total_sleep_secs % 3600) // 60
+    print()
+    print("The total hours you slept this week: {} hours and {} minutes".format(total_sleep_hours, total_sleep_minutes))
+    print()
+
+    #average hours of sleep throughout week
+    average_sleep_secs = total_sleep_secs / 7
+    average_sleep_hours = average_sleep_secs // 3600
+    average_sleep_minutes = (average_sleep_secs % 3600) // 60
+    print("The average number of hours you slept over the week: {} hours and {} minutes".format(int(average_sleep_hours), int(average_sleep_minutes)))
+
+     
 
 def main():
     #an empty dict with days of week as keys and empty values
+    #dict where keys are dates and the values are the hours of sleep
     week_info = {
         "Monday": None,
         "Tuesday": None,
@@ -60,14 +70,12 @@ def main():
         "Friday": None,
         "Saturday": None,
         "Sunday": None
-    }
-    #store sleep data in list/dictionary where each entry -> day of the week
-    #dict where keys are dates and the values are the hours of sleep
+        }
     #new variable for total accumulated hrs of sleep
     total_sleep_secs = 0
     
     #introductory text
-    print("Hello Human!")
+    print("Hi there!")
     print("Welcome to the Best Sleep Tracker :)")
     print()
     
